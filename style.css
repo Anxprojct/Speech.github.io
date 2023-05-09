@@ -1,0 +1,120 @@
+body {
+
+  margin: 0;
+
+  padding: 0;
+
+  background-color: #000;
+
+  color: #fff;
+
+  font-family: 'Courier New', Courier, monospace;
+
+}
+
+.terminal {
+
+  width: 600px;
+
+  height: 400px;
+
+  background-color: #000;
+
+  border: 2px solid #fff;
+
+  border-radius: 5px;
+
+  overflow: hidden;
+
+}
+
+.header {
+
+  height: 30px;
+
+  background-color: #444;
+
+  padding: 5px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+}
+
+.buttons {
+
+  display: flex;
+
+}
+
+.red, .yellow, .green {
+
+  width: 12px;
+
+  height: 12px;
+
+  border-radius: 50%;
+
+  margin-right: 5px;
+
+}
+
+.red {
+
+  background-color: #f00;
+
+}
+
+.yellow {
+
+  background-color: #ff0;
+
+}
+
+.green {
+
+  background-color: #0f0;
+
+}
+
+.title {
+
+  font-size: 14px;
+
+  font-weight: bold;
+
+}
+
+.body {
+
+  height: calc(100% - 30px);
+
+  display: flex;
+
+  flex-direction: column;
+
+}
+
+.input {
+
+  height: 50%;
+
+  padding: 5px;
+
+  overflow-y: scroll;
+
+}
+
+.output {
+
+  height: 50%;
+
+  padding: 5px;
+
+  overflow-y: scroll;
+
+}
+
