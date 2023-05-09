@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Text to Speech</title>
+  </head>
+  <body>
+    <h1>Text to Speech</h1>
+    <textarea id="text-to-speak" rows="5" cols="40">Tulis teks yang ingin diubah menjadi suara di sini.</textarea>
+    <br>
+    <button onclick="speak()">Bicarakan</button>
+
+    <script>
+      function speak() {
+        const text = document.getElementById("text-to-speak").value;
+        const utterance = new SpeechSynthesisUtterance(text);
+        window.speechSynthesis.speak(utterance);
+      }
+    </script>
+  </body>
+</html>
