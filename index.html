@@ -1,58 +1,161 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Terminal</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-  </head>
-  <body>
-    <div class="container">
-      <div class="sidebar">
-        <div class="logo">
-          <img src="logo.png" alt="Logo">
-        </div>
-        <nav>
-          <ul>
-            <li class="active"><a href="#">Beranda</a></li>
-            <li><a href="#">Artikel</a></li>
-            <li><a href="#">Tentang Kami</a></li>
-          </ul>
-        </nav>
-      </div>
-      <div class="main">
-        <div class="terminal">
-          <div class="header">
-            <div class="buttons">
-              <div class="red"></div>
-              <div class="yellow"></div>
-              <div class="green"></div>
-            </div>
-            <div class="title">Terminal</div>
-          </div>
-          <div class="body">
-            <div class="input" contenteditable></div>
-            <div class="output"></div>
-          </div>
-        </div>
-        <div class="articles">
-          <h2>Daftar Artikel</h2>
-          <ul>
-            <li><a href="#">Artikel 1</a></li>
-            <li><a href="#">Artikel 2</a></li>
-            <li><a href="#">Artikel 3</a></li>
-            <li><a href="#">Artikel 4</a></li>
-          </ul>
-        </div>
-        <div class="examples">
-          <h2>Contoh Artikel</h2>
-          <ul>
-            <li><a href="#">Contoh Artikel 1</a></li>
-            <li><a href="#">Contoh Artikel 2</a></li>
-            <li><a href="#">Contoh Artikel 3</a></li>
-            <li><a href="#">Contoh Artikel 4</a></li>
-          </ul>
-        </div>
-      </div>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <style>
+        /* Gaya tampilan untuk perangkat mobile */
+        @media only screen and (max-width: 600px) {
+            #game-container {
+                width: 100%;
+                height: 100vh;
+                position: relative;
+                overflow: hidden;
+            }
+            #bird {
+                width: 10%;
+                height: 10vh;
+                background-color: yellow;
+                position: absolute;
+                bottom: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+            .pipe {
+                width: 15px;
+                height: 40vh;
+                background-color: green;
+                position: absolute;
+                bottom: 0;
+                animation: pipeMove linear 3s infinite;
+            }
+            @keyframes pipeMove {
+                0% {
+                    left: 100%;
+                }
+                100% {
+                    left: -15px;
+                }
+            }
+            #score {
+                font-size: 16px;
+                position: absolute;
+                top: 10px;
+                left: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="bird"></div>
+        <div id="pipe-container"></div>
+        <div id="score">Score: 0</div>
     </div>
-    <script src="script.js"></script>
-  </body>
+
+    <script>
+        // Your JavaScript code for Flappy Bird game
+
+        // Variabel game
+        var bird = document.getElementById('bird');
+        var pipeContainer = document.getElementById('pipe-container');
+        var scoreDisplay = document.getElementById('score');
+        var score = 0;
+
+        // Event listener for touchstart on mobile devices
+        document.addEventListener("touchstart", function(event) {
+            jump();
+        });
+
+        // Function to make the bird jump
+        function jump() {
+            bird.style.animation = 'jump 0.5s';
+            setTimeout(function() {
+                bird.style.animation = '';
+            }, 500);
+        }
+
+        // Function to generate random pipe height
+        function getRandomHeight() {
+            return Math.floor(Math.random() * 60) + 20;
+        }
+
+        // Function to create a pipe
+        function createPipe() {
+            var pipe = document.createElement('div');
+            pipe.className = 'pipe';
+            pipe.style.height = getRandomHeight() + 'vh';
+            pipeContainer.appendChild(pipe);
+            return pipe;
+        }
+
+        // Function to remove a pipe from the DOM
+        function removePipe(pipe) {
+            pipeContainer.removeChild(pipe);
+        }
+
+        // Function to move the pipes and check for collision
+        function movePipes() {
+            var pipes = document.getElementsByClassName('pipe');
+            for (var i = 0; i < pipes.length; i++) {
+                var pipe = pipes[i];
+                var left = parseInt(pipe.style.left);
+                if (left <= 0) {
+                    removePipe(pipe);
+                    score++;
+                    scoreDisplay.innerHTML = 'Score: ' + score;
+                } else {
+                    pipe.style.left = (left - 1) + '%';
+                    if (checkCollision(pipe)) {
+                        endGame();
+                        return;
+                    }
+                }
+            }
+            requestAnimationFrame(movePipes);
+        }
+
+        // Function to check for collision between the bird and a pipe
+        function checkCollision(pipe) {
+            var birdTop = bird.offsetTop;
+            var birdBottom = bird.offsetTop + bird.offsetHeight;
+            var birdLeft = bird.offsetLeft;
+            var birdRight = bird.offsetLeft + bird.offsetWidth;
+
+            var pipeTop = pipe.offsetTop;
+            var pipeBottom = pipe.offsetTop + pipe.offsetHeight;
+            var pipeLeft = pipe.offsetLeft;
+            var pipeRight = pipe.offsetLeft + pipe.offsetWidth;
+
+            if (
+                birdBottom < pipeTop ||
+                birdTop > pipeBottom ||
+                birdRight < pipeLeft ||
+                birdLeft > pipeRight
+            ) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        // Function to end the game
+        function endGame() {
+            alert('Game Over! Your score: ' + score);
+            location.reload();
+        }
+
+        // Function to start the game
+        function startGame() {
+            setInterval(function() {
+                var pipe = createPipe();
+                pipe.style.left = '100%';
+            }, 2000);
+            requestAnimationFrame(movePipes);
+        }
+
+        // Start the game
+        startGame();
+
+    </script>
+</body>
 </html>
